@@ -1,0 +1,179 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>FriendFinder</title>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.5.1/chosen.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.5.1/chosen.jquery.min.js"></script>
+
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h2>Survey Questions</h2>
+
+
+    <h3>About You</h3>
+    <br>
+    <h4>Your Name (Required)</h4>
+    <input type="text" id="name" class="form-control" required>
+
+    <h4>Link to Your Photo (Required)</h4>
+    <input type="text" id="photo" class="form-control" required>
+
+    <div class= "container questions"></div>
+
+    <br>
+    <button type="submit" class="btn btn-primary btn-lg btn-block" id="submit">
+     Submit
+    </button>
+ 
+     <footer class="footer">
+      <div class="container">
+        <a href="/api/friends">API Friends List</a> | <a href="https://github.com/ptanzy/friend_finder">GitHub Repo</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Modal -->
+  <div id="results-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Modal title</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          <h2 class="modal-title"><strong>Best Match</strong></h2>
+        </div>
+        <div class="modal-body">
+          <h2 id="match-name"></h2>
+          <img id="match-img" src="https://media.licdn.com/mpr/mpr/shrinknp_400_400/p/6/005/064/1bd/3435aa3.jpg" alt="">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      var questionArr = ["Your mind is always buzzing with unexplored ideas and plans.",
+                         "Generally speaking, you rely more on your experience than your imagination.",
+                         "You find it easy to stay relaxed and focused even when there is some pressure.",
+                         "You rarely do something just out of sheer curiosity.",
+                         "People can rarely upset you.",
+                         "It is often difficult for you to relate to other people’s feelings.",
+                         "In a discussion, truth should be more important than people’s sensitivities.",
+                         "You rarely get carried away by fantasies and ideas.",
+                         "You think that everyone’s views should be respected regardless of whether they are supported by facts or not.",
+                         "You feel more energetic after spending time with a group of people."];
+      var ques = $(".questions");
+      for(var i = 0; i<questionArr.length; i++){
+        buildQuestionHTML(i+1, questionArr[i], ques);
+      }
+
+    });
+
+    $('.chosen-select').chosen();
+
+    $("#submit").on("click", function(event) {
+      event.preventDefault();
+      var $form = $(".form-control");
+      var isFormValid = validateFormFields($form);
+      var $chosen = $(".chosen-select");
+      var isChosenValid = validateFormFields($chosen);
+      if(isFormValid && isChosenValid){
+        var data = {
+          name: $("#name").val(),
+          photo: $("#photo").val(),
+          scores: [
+            $("#q1").val(),
+            $("#q2").val(),
+            $("#q3").val(),
+            $("#q4").val(),
+            $("#q5").val(),
+            $("#q6").val(),
+            $("#q7").val(),
+            $("#q8").val(),
+            $("#q9").val(),
+            $("#q10").val()
+          ]
+        };
+        $.post("/api/friends", userData, function(data) {
+          $("#match-name").text(data.name);
+          $("#match-img").attr("src", data.photo);
+
+          $("#results-modal").modal("toggle");
+        });
+      }
+    });
+
+    function validateFormFields($form){
+      $form.forEach(function(){
+        if($(this).val() === ""){
+          return false;
+        }
+      });
+      return true;
+    }
+
+    function buildQuestionHTML(num, question, $div){
+      var $head = $("<h3>").text("Question "+num)
+                        .attr("font-weight", "bold");
+      $div.append($head);
+      var $question = $("<h4>").text(question);
+      $div.append($question);
+      var $selections = $("<select>").attr("class", "chosen-select").attr("id","q"+num);
+      var options = ["","1 (Strongly Disagree", "2", "3", "4", "5 Strongly Agree"];
+      for(var  i = 0; i<options.length; i++){
+        var val = "";
+        if(i>0){
+          val = i;
+        }
+        $selections.append($("<option>").text(options[i]).attr("value", val))
+      }
+      $div.append($selections);
+
+
+      // var config = {
+      //   ".chosen-select": {},
+      //   // ".chosen-select-deselect": {
+      //   //   allow_single_deselect: true
+      //   // },
+      //   // ".chosen-select-no-single": {
+      //   //   disable_search_threshold: 10
+      //   // },
+      //   // ".chosen-select-no-results": {
+      //   //   no_results_text: "Oops, nothing found!"
+      //   // },
+      //   ".chosen-select-width": {
+      //     width: "95%"
+      //   }
+      // };
+
+      // for (var selector in config) {
+      //   $(selector).chosen(config[selector]);
+      // }
+
+    }
+  </script>
+
+</body>
+
+</html>
