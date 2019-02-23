@@ -115,7 +115,7 @@
             $("#q10").val()
           ]
         };
-        $.post("/api/friends", userData, function(data) {
+        $.post("/api/friends", data, function(data) {
           $("#match-name").text(data.name);
           $("#match-img").attr("src", data.photo);
 
@@ -125,7 +125,7 @@
     });
 
     function validateFormFields($form){
-      $form.forEach(function(){
+      $form.each(function(){
         if($(this).val() === ""){
           return false;
         }
