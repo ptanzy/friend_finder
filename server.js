@@ -45,7 +45,7 @@ app.post("/api/friends", function(req, res) {
   for(var i = 1; i<friends.length; i++){
     //if the user and current friend are the same then skip it
     //because we don't want the user to match themselves.
-    if(user.name === friend[i].name){
+    if(user.name === friends[i].name){
       continue;
     }
     dif = compareFriendScores(user.scores, friends[i]);
