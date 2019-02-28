@@ -73,16 +73,16 @@
 
   <script type="text/javascript">
     $(document).ready(function() {
-      var questionArr = ["Your mind is always buzzing with unexplored ideas and plans.",
-                         "Generally speaking, you rely more on your experience than your imagination.",
-                         "You find it easy to stay relaxed and focused even when there is some pressure.",
-                         "You rarely do something just out of sheer curiosity.",
-                         "People can rarely upset you.",
-                         "It is often difficult for you to relate to other people’s feelings.",
-                         "In a discussion, truth should be more important than people’s sensitivities.",
-                         "You rarely get carried away by fantasies and ideas.",
-                         "You think that everyone’s views should be respected regardless of whether they are supported by facts or not.",
-                         "You feel more energetic after spending time with a group of people."];
+      var questionArr = ["Your favorite foods are pizza and spaghetti.",
+                         "Your hands do most of the talking for you.",
+                         "You find it difficult to talk quietly.",
+                         "You love your mamma more than anyone.",
+                         "Your favorite sport is soccer...er football.",
+                         "You know at least one person who is or claims to be in the mafia.",
+                         "If you cook a meal it is bound to have a lot of olive oil and garlic in it.",
+                         "You think green, white and red go rather well together.",
+                         "You like to enjoy a cup of espresso in the morning, afternoon and night.",
+                         "The French are pleasant people..."];
       var ques = $(".questions");
       for(var i = 0; i<questionArr.length; i++){
         buildQuestionHTML(i+1, questionArr[i], ques);
@@ -149,27 +149,6 @@
         $selections.append($("<option>").text(options[i]).attr("value", val))
       }
       $div.append($selections);
-
-
-      // var config = {
-      //   ".chosen-select": {},
-      //   // ".chosen-select-deselect": {
-      //   //   allow_single_deselect: true
-      //   // },
-      //   // ".chosen-select-no-single": {
-      //   //   disable_search_threshold: 10
-      //   // },
-      //   // ".chosen-select-no-results": {
-      //   //   no_results_text: "Oops, nothing found!"
-      //   // },
-      //   ".chosen-select-width": {
-      //     width: "95%"
-      //   }
-      // };
-
-      // for (var selector in config) {
-      //   $(selector).chosen(config[selector]);
-      // }
 
     }
   </script>
